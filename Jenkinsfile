@@ -2,7 +2,7 @@ node {
 	def mvnHome
 	stage('Checkout Code') {
 		echo 'Initiating build using JenkinsFile from Source code'
-		git 'https://bitbucket.org/karanvir-arora/starwars-kva.git'
+		git 'https://github.com/PSEH-9/starwars-kva.git'
 		echo 'Source code checked out'
 		mvnHome = tool 'M3'
 	}
