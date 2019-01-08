@@ -41,13 +41,13 @@ node {
    			sh "chmod 400 jenkins.pem"
    			
    			// Kill Running Application
-   			//sh "ssh -i jenkins.pem ubuntu@18.216.165.122 pkill -f starwars-kva-0.0.1-SNAPSHOT.jar"
+   			sh "ssh -i jenkins.pem ubuntu@18.216.165.122 pkill -f starwars-kva-0.0.1-SNAPSHOT.jar"
    			
    			//Copy Application Jar
-   			//sh "scp -r -i jenkins.pem target/starwars-kva-0.0.1-SNAPSHOT.jar  ubuntu@18.216.165.122:/home/ubuntu/kva/"
+   			sh "scp -r -i jenkins.pem target/starwars-kva-0.0.1-SNAPSHOT.jar  ubuntu@18.216.165.122:/home/ubuntu/kva/"
    			
    			//Start Application
-   			//sh "ssh -i jenkins.pem ubuntu@18.216.165.122 nohup java -jar /home/ubuntu/kva/starwars-kva-0.0.1-SNAPSHOT.jar --server.port=8080 &"
+   			sh "ssh -i jenkins.pem ubuntu@18.216.165.122 nohup java -jar /home/ubuntu/kva/starwars-kva-0.0.1-SNAPSHOT.jar --server.port=8080 &"
    			
    			echo 'Deployment Complete'
    		} else{
