@@ -1,0 +1,10 @@
+.svn/
+.settings/
+bin/
+project/project/
+target/
+.cache
+.cache-main
+.classpath
+.project
+*.log
