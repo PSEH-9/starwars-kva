@@ -7,7 +7,7 @@ node {
 		mvnHome = tool 'M3'
 	}
 
-	stage('MAVEN Build'){
+	stage('Build'){
 		echo 'Initiating MAVEN build'
 		 if (isUnix()) {
 		 	echo 'OS is Unix'
