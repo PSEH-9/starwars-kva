@@ -118,6 +118,13 @@ public class SearchService {
             results = responseBody.get("results");
         }
         responseNode.set("results", results);
+
+        if (results != null && results.isArray() && results.size() > 0) {
+            JsonNode resultNode = results.get(0);
+            if (resultNode.has("films")) {
+                responseNode.set("films", resultNode.get("films"));
+            }
+        }
     }
 
     /**
