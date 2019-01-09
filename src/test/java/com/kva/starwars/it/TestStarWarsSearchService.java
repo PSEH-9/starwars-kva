@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,9 +22,7 @@ public class TestStarWarsSearchService {
     @LocalServerPort
     private int port;
 
-    TestRestTemplate restTemplate = new TestRestTemplate();
-
-    HttpHeaders headers = new HttpHeaders();
+    private TestRestTemplate restTemplate = new TestRestTemplate();
 
     @Test
     public void testSearchPlanet() {
@@ -62,8 +59,7 @@ public class TestStarWarsSearchService {
         ResponseEntity<JsonNode> response = invokeSearchAPI("starships", "Star");
         assertSuccessResponse(response);
     }
-    
-    
+
     @Test
     public void testInvalidType() {
         ResponseEntity<JsonNode> response = restTemplate.getForEntity(
@@ -77,11 +73,11 @@ public class TestStarWarsSearchService {
         Assert.assertTrue(StringUtils.equals(status, "failure"));
         Assert.assertTrue(responseBody.has("errorMessage"));
     }
-    
+
     @Test
-    public void testBadRequest(){
-        ResponseEntity<JsonNode> response = restTemplate.getForEntity(
-                createURLWithPort("/swapi/search?type=&name="), JsonNode.class);
+    public void testBadRequest() {
+        ResponseEntity<JsonNode> response = restTemplate
+                .getForEntity(createURLWithPort("/swapi/search?type=&name="), JsonNode.class);
         Assert.assertEquals(response.getStatusCode().value(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
         Assert.assertNotNull(response.getBody());
         JsonNode responseBody = response.getBody();
@@ -91,8 +87,23 @@ public class TestStarWarsSearchService {
         Assert.assertTrue(StringUtils.equals(status, "failure"));
         Assert.assertTrue(responseBody.has("errorMessage"));
     }
-    
-    
+
+    @Test
+    public void testResultsNotFound() {
+        ResponseEntity<JsonNode> response = invokeSearchAPI("starships", "invalid");
+        Assert.assertEquals(response.getStatusCode().value(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        Assert.assertNotNull(response.getBody());
+        JsonNode responseBody = response.getBody();
+        Assert.assertTrue(responseBody.has("request"));
+        Assert.assertTrue(responseBody.has("status"));
+        String status = responseBody.get("status").asText();
+        Assert.assertTrue(StringUtils.equals(status, "failure"));
+        Assert.assertTrue(responseBody.has("errorMessage"));
+        String errorMessage = responseBody.get("errorMessage").asText();
+        Assert.assertTrue(StringUtils.equalsIgnoreCase(errorMessage,
+                "No results found for the given search request"));
+
+    }
 
     private ResponseEntity<JsonNode> invokeSearchAPI(String type, String name) {
         return restTemplate.getForEntity(
@@ -120,8 +131,6 @@ public class TestStarWarsSearchService {
 
         Assert.assertTrue(responseBody.has("results"));
     }
-
-    
 
     private String createURLWithPort(String uri) {
         return "http://localhost:" + port + uri;

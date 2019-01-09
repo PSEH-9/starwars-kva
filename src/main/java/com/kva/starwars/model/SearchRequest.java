@@ -2,6 +2,11 @@ package com.kva.starwars.model;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @author kararora0
+ *
+ */
 public class SearchRequest implements Serializable {
 
     /**

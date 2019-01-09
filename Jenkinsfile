@@ -36,19 +36,21 @@ node {
    }
    
    stage('Deploy') {
-   		echo 'Deploy : Pending'
+   		echo 'Deploy App'
    		if (isUnix()) {
    			sh "chmod 400 jenkins.pem"
    			
    			// Kill Running Application
-   			sh "ssh -i jenkins.pem ubuntu@18.216.165.122 pkill -f starwars-kva-0.0.1-SNAPSHOT.jar"
+   			sh "ssh -i jenkins.pem ubuntu@18.216.165.122 sh /home/ubuntu/kva/stop.sh"
+   			echo 'Stop Application script executed'
    			
    			//Copy Application Jar
    			sh "scp -r -i jenkins.pem target/starwars-kva-0.0.1-SNAPSHOT.jar  ubuntu@18.216.165.122:/home/ubuntu/kva/"
+   			echo 'Application JAR copied'
    			
    			//Start Application
-   			sh "ssh -i jenkins.pem ubuntu@18.216.165.122 nohup java -jar /home/ubuntu/kva/starwars-kva-0.0.1-SNAPSHOT.jar --server.port=8080 &"
-   			
+   			sh "ssh -i jenkins.pem ubuntu@18.216.165.122 sh /home/ubuntu/kva/start.sh"
+   			echo 'Start Application script executed'
    			echo 'Deployment Complete'
    		} else{
    			echo 'Skipping deployment on windows platform'

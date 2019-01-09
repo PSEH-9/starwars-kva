@@ -14,6 +14,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * 
+ * @author kararora0
+ *
+ */
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -27,6 +32,19 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     public final ResponseEntity<JsonNode> handleInvalidTypeException(InvalidTypeException ex,
             WebRequest request) {
         LOGGER.error("handleInvalidTypeException: Exception:", ex);
+        ObjectNode responseNode = objectMapper.createObjectNode();
+        responseNode.put("status", "failure");
+        responseNode.put("errorMessage", ex.getMessage());
+
+        populateRequestDetails(request, responseNode);
+
+        return new ResponseEntity<>(responseNode, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @ExceptionHandler(ResultsNotFoundException.class)
+    public final ResponseEntity<JsonNode> handleResultsNotFoundException(ResultsNotFoundException ex,
+            WebRequest request) {
+        LOGGER.error("handleResultsNotFoundException: Exception:", ex);
         ObjectNode responseNode = objectMapper.createObjectNode();
         responseNode.put("status", "failure");
         responseNode.put("errorMessage", ex.getMessage());

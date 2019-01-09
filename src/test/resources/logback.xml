@@ -19,7 +19,7 @@
     </encoder>
   </appender>
 
-  <logger name="com.kva.starwars" level="INFO" additivity="false">
+  <logger name="com.kva.starwars" level="OFF" additivity="false">
    <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </logger>

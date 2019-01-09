@@ -14,9 +14,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kva.starwars.exception.InvalidRequestException;
 import com.kva.starwars.exception.InvalidTypeException;
+import com.kva.starwars.exception.ResultsNotFoundException;
 import com.kva.starwars.model.EntityTypes;
 import com.kva.starwars.model.SearchRequest;
 
+/**
+ * 
+ * @author kararora0
+ *
+ */
 @Service
 public class SearchService {
 
@@ -99,6 +105,12 @@ public class SearchService {
             count = responseBody.get("count").intValue();
         }
         LOGGER.debug("Results Count:{}", count);
+        if (count == 0) {
+            LOGGER.error("No results found for the given search request. WS Response:{}",
+                    responseBody);
+            throw new ResultsNotFoundException("No results found for the given search request");
+        }
+
         responseNode.put("count", count);
 
         JsonNode results = null;

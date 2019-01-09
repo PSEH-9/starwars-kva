@@ -10,6 +10,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.kva.starwars.model.SearchRequest;
 import com.kva.starwars.service.SearchService;
 
+
+/**
+ * 
+ * @author kararora0
+ *
+ */
 @RestController
 @RequestMapping("/swapi")
 public class SearchController {
@@ -18,8 +24,9 @@ public class SearchController {
     private SearchService searchService;
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
-    public JsonNode searchStarWars(@RequestParam(value="type", required=false, defaultValue="") String type,
-            @RequestParam(value="name", required=false, defaultValue="") String name) {
+    public JsonNode searchStarWars(
+            @RequestParam(value = "type", required = false, defaultValue = "") String type,
+            @RequestParam(value = "name", required = false, defaultValue = "") String name) {
         return searchService.searchStarWars(constructSearchRequest(type, name));
     }
 

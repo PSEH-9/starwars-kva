@@ -2,6 +2,11 @@ package com.kva.starwars.exception;
 
 import com.kva.starwars.model.SearchRequest;
 
+/**
+ * 
+ * @author kararora0
+ *
+ */
 public class InvalidTypeException extends RuntimeException {
 
     /**
